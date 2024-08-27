@@ -112,8 +112,13 @@ export class RinnaiControlrPlatformAccessory {
                 .onSet(this.setRecirculateActive.bind(this));
             recircService.updateCharacteristic(this.platform.Characteristic.On,
                 this.device.shadow.recirculation_enabled);
+            recircService.getCharacteristic(this.platform.Characteristic.On)
+                .onGet(this.getRecirculationActive.bind(this));
+
             if (isPrimary) {
                 recircService.setCharacteristic(this.platform.Characteristic.Name, this.device.device_name);
+                this.platform.log.debug(`Device ${this.device.dsn} setting name: ${this.device.device_name} 
+                    for recirculation service as it is the primary service.`);
             }
             return recircService;
         } else {
@@ -142,6 +147,13 @@ export class RinnaiControlrPlatformAccessory {
             [API_KEY_SET_RECIRCULATION_ENABLED]: (value as boolean),
         };
         await this.platform.setState(this.accessory, state);
+
+    }
+
+    async getRecirculationActive(): Promise<CharacteristicValue> {
+        // start a timer to check the accessory state after the timeout duration + some API delay
+        this.platform.throttledPoll();
+        return this.device.shadow.recirculation_enabled;
     }
 
     async setTemperature(value: CharacteristicValue) {

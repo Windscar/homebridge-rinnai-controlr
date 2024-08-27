@@ -262,7 +262,7 @@ export const API_KEY_SET_TEMPERATURE = 'set_domestic_temperature';
 export const API_VALUE_TRUE = 'true';
 export const API_VALUE_FALSE = 'false';
 
-export const API_POLL_THROTTLE_MILLIS = 1000;
+export const API_POLL_THROTTLE_MILLIS = 2 * 1000;
 export const SET_STATE_WAIT_TIME_MILLIS = 5000;
 
 export const MANUFACTURER = 'Rinnai';
